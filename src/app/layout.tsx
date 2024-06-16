@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 import ProgressBarProvider from "@/provider/progress-bar.provider";
 import "../assets/css/global.css";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { ReactQueryProvider } from "@/context/react-query.provider";
 import RecoilContextProvider from "@/provider/recoil-provider.context";
 
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
       height: 1080,
       alt: "Plania",
       type: "image/svg+xml",
-    }
+    },
   },
 };
 
@@ -36,7 +36,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body suppressHydrationWarning={true} className='min-h-screen min-w-full font-montserrat'>
+      <body
+        suppressHydrationWarning={true}
+        className="min-h-screen min-w-full font-montserrat"
+      >
         <ProgressBarProvider>
           <ReactQueryProvider>
             <RecoilContextProvider>

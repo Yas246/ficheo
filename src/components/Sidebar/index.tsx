@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import {
+  ArrowLeftCircle,
+  CalendarFold,
+  File,
+  LayoutDashboard,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import { ArrowLeftCircle, CalendarFold, File, LayoutDashboard } from "lucide-react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -21,7 +26,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   let storedSidebarExpanded = "true";
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
   );
 
   // close on click outside
@@ -62,8 +67,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      }`}
     >
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link className="flex items-center space-x-3" href="/">
@@ -75,9 +81,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             className="w-auto h-auto max-h-18 max-w-16"
             priority
           />
-          <span className="text-2xl font-bold font-satoshi text-white">Plania</span>
+          <span className="text-2xl font-bold font-satoshi text-white">
+            FicheInfo
+          </span>
         </Link>
-
 
         <button
           ref={trigger}
@@ -104,10 +111,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href="/"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/" ||
-                          pathname.includes("dashboard")) &&
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          (pathname === "/" ||
+                            pathname.includes("dashboard")) &&
                           "bg-graydark dark:bg-meta-4"
-                          }`}
+                        }`}
                         // onClick={(e) => {
                         //   e.preventDefault();
                         //   sidebarExpanded
@@ -126,24 +134,26 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/projects"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("projects") &&
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes("projects") &&
                     "bg-graydark dark:bg-meta-4"
-                    }`}
+                  }`}
                 >
                   <CalendarFold className="h-5 w-5" />
-                  Projets
+                  Missions
                 </Link>
               </li>
 
               <li>
                 <Link
                   href="/generate-pip"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("generate-pip") &&
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes("generate-pip") &&
                     "bg-graydark dark:bg-meta-4"
-                    }`}
+                  }`}
                 >
                   <File className="h-5 w-5" />
-                  PiP
+                  Rapports
                 </Link>
               </li>
             </ul>

@@ -1,200 +1,207 @@
 import { IProject } from "@/shared/models";
 
 export const ProjectData: IProject = {
-    title: "My Project",
-    overview: "This is a brief overview of my project.",
-    context: "The context of my project is...",
-    justification: "The justification for my project is...",
-    description: "A detailed description of my project.",
-    global_objective: "The overall goal of my project.",
+  title: "New Mission",
+  overview: "Ceci est un résumé de la mission .",
+  client: "The client of my project is...",
+  site: "The site of my project is...",
+  technicien: "The technicien of my project is...",
+  context: "The context of my project is...",
+  justification: "The justification for my project is...",
+  description: "A detailed description of my project.",
+  global_objective: "The overall goal of my project.",
 
-    objectives: ["Objective 1", "Objective 2", "Objective 3"],
+  objectives: ["Objective 1", "Objective 2", "Objective 3"],
 
-    duration: 12,
-    budget: "100000",
-    budget_currency: "USD",
+  duration: 12,
+  budget: "100000",
+  budget_currency: "USD",
 
-    logical_context: {
-        impact: "Impact 1",
-        intermediate_outcomes: [
-            {
-                title: "Intermediate Outcome 1",
-                immediate_outcomes: [
-                    {
-                        title: "Immediate Outcome 1.1",
-                        activities: [
-                            {
-                                title: "Activity 1.1.1",
-                                effect: "Effect 1.1.1",
-                            },
-                            {
-                                title: "Activity 1.1.2",
-                                effect: "Effect 1.1.2",
-                            },
-                        ],
-                    },
-                    {
-                        title: "Immediate Outcome 1.2",
-                        activities: [
-                            {
-                                title: "Activity 1.2.1",
-                                effect: "Effect 1.2.1",
-                            },
-                            {
-                                title: "Activity 1.2.2",
-                                effect: "Effect 1.2.2",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                title: "Intermediate Outcome 2",
-                immediate_outcomes: [
-                    // ... Define immediate outcomes for Intermediate Outcome 2
-                ],
-            },
+  logical_context: {
+    impact: "Impact 1",
+    intermediate_outcomes: [
+      {
+        title: "Objectif 1",
+        immediate_outcomes: [
+          {
+            title: "Immediate Outcome 1.1",
+            activities: [
+              {
+                title: "Activité 1.1.1",
+                effect: "Effect 1.1.1",
+              },
+              {
+                title: "Activité 1.1.2",
+                effect: "Effect 1.1.2",
+              },
+            ],
+          },
+          {
+            title: "Immediate Outcome 1.2",
+            activities: [
+              {
+                title: "Activité 1.2.1",
+                effect: "Effect 1.2.1",
+              },
+              {
+                title: "Activité 1.2.2",
+                effect: "Effect 1.2.2",
+              },
+            ],
+          },
         ],
+      },
+      {
+        title: "Objectif 2",
+        immediate_outcomes: [
+          // ... Define immediate outcomes for Objectif 2
+        ],
+      },
+    ],
+  },
+
+  intervention_strategies: ["Strategy 1", "Strategy 2"],
+
+  partners: [
+    {
+      managment_levels: [
+        {
+          title: "Management Level 1",
+          level: "High",
+          stakeholders: [
+            {
+              name: ["Stakeholder 1.1", "Stakeholder 1.2"],
+              abilities: ["Ability 1.1", "Ability 1.2"],
+            },
+          ],
+        },
+      ],
     },
+  ],
 
-    intervention_strategies: ["Strategy 1", "Strategy 2"],
+  quality_monitoring: ["Method 1", "Method 2"],
 
-    partners: [
+  performance_matrix: [
+    {
+      outcome: "",
+      indicateur: [
         {
-            managment_levels: [
-                {
-                    title: "Management Level 1",
-                    level: "High",
-                    stakeholders: [
-                        {
-                            name: ["Stakeholder 1.1", "Stakeholder 1.2"],
-                            abilities: ["Ability 1.1", "Ability 1.2"],
-                        },
-                    ],
-                },
-            ],
+          title: "",
+          props: {
+            target: "",
+            baseline: [],
+            data_souces: [],
+            managers: ["Source 1.1", "Source 1.2"],
+            collect_tools: ["Tool 1.1", "Tool 1.2"],
+            frequency: ["Monthly"],
+          },
         },
-    ],
-
-    quality_monitoring: ["Method 1", "Method 2"],
-
-    performance_matrix: [
+      ],
+    },
+    {
+      outcome: "",
+      indicateur: [
         {
-            outcome: "",
-            indicateur: [
-                {
-                    title: "",
-                    props: {
-                        target: "",
-                        baseline: [],
-                        data_souces: [],
-                        managers: ["Source 1.1", "Source 1.2"],
-                        collect_tools: ["Tool 1.1", "Tool 1.2"],
-                        frequency: ["Monthly"],
-                    }
-                }
-            ]
+          title: "",
+          props: {
+            baseline: [],
+            target: "",
+            data_souces: [],
+            collect_tools: ["Tool 1.1", "Tool 1.2"],
+            frequency: ["Monthly"],
+            managers: ["Source 1.1", "Source 1.2"],
+          },
+        },
+      ],
+    },
+  ],
+
+  budget_plan: [
+    {
+      section: "Section 1",
+      activities: [
+        {
+          title: "Activité 1.1",
+          budget: 1000,
         },
         {
-            outcome: "",
-            indicateur: [
-                {
-                    title: "",
-                    props: {
-                        baseline: [],
-                        target: "",
-                        data_souces: [],
-                        collect_tools: ["Tool 1.1", "Tool 1.2"],
-                        frequency: ["Monthly"],
-                        managers: ["Source 1.1", "Source 1.2"],
-                    }
-                }
-            ]
-        }
-    ],
-
-    budget_plan: [
-        {
-            section: "Section 1",
-            activities: [
-                {
-                    title: "Activity 1.1",
-                    budget: 1000,
-                },
-                {
-                    title: "Activity 1.2",
-                    budget: 2000,
-                },
-            ],
+          title: "Activité 1.2",
+          budget: 2000,
         },
-    ],
+      ],
+    },
+  ],
 
-    calendar: [
+  calendar: [
+    {
+      outcome: "Outcome 1",
+      activities: [
         {
-            outcome: "Outcome 1",
-            activities: [
-                {
-                    title: "Activity 1.1",
-                    period: [
-                        {
-                            start_date: "2024-05-01",
-                            end_date: "2024-05-31",
-                        }
-                    ]
-                },
-                {
-                    title: "Activity 1.1",
-                    period: [
-                        {
-                            start_date: "2024-05-01",
-                            end_date: "2024-05-31",
-                        }
-                    ]
-                },
-            ],
+          title: "Activité 1.1",
+          period: [
+            {
+              start_date: "2024-05-01",
+              end_date: "2024-05-31",
+            },
+          ],
         },
-    ],
+        {
+          title: "Activité 1.1",
+          period: [
+            {
+              start_date: "2024-05-01",
+              end_date: "2024-05-31",
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 export const EmptyProjectData: IProject = {
-    title: '',
-    overview: '',
-    context: '',
-    justification: '',
-    description: '',
-    global_objective: '',
+  title: "",
+  overview: "",
+  context: "",
+  justification: "",
+  description: "",
+  global_objective: "",
 
-    objectives: [],
+  objectives: [],
 
-    duration: 0,
-    budget: '',
-    budget_currency: '',
+  duration: 0,
+  budget: "",
+  budget_currency: "",
 
-    logical_context: {
-        impact: '',
-        intermediate_outcomes: [],
+  logical_context: {
+    impact: "",
+    intermediate_outcomes: [],
+  },
+
+  intervention_strategies: [],
+
+  partners: [
+    {
+      managment_levels: [
+        {
+          title: "",
+          level: "",
+          stakeholders: [
+            {
+              name: [],
+              abilities: [],
+            },
+          ],
+        },
+      ],
     },
+  ],
 
-    intervention_strategies: [],
+  quality_monitoring: [],
 
-    partners: [{
-        managment_levels: [{
-            title: "",
-            level: "",
-            stakeholders: [
-                {
-                    name: [],
-                    abilities: [],
-                }
-            ]
-        }]
-    }],
+  performance_matrix: [],
 
-    quality_monitoring: [],
+  budget_plan: [],
 
-    performance_matrix: [],
-
-    budget_plan: [],
-
-    calendar: [],
+  calendar: [],
 };

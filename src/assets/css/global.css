@@ -34,3 +34,15 @@
     box-sizing: border-box;
   }
 }
+
+/* global.css */
+
+.invisible-on-screen {
+  display: none; /* ou toute autre propriété CSS pour le rendre invisible */
+}
+
+@media print {
+  .invisible-on-screen {
+    display: block !important; /* ou réglez-le pour le rendre visible lors de l'impression */
+  }
+}

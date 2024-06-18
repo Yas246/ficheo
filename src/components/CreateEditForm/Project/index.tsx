@@ -113,7 +113,7 @@ export default function CreateEditProject({ id }: { id?: string }) {
             <InputText
               name="technicien"
               label="Technicien"
-              value={values.site}
+              value={values.technicien}
               onChange={handleChange}
               errors={errors.site}
             />

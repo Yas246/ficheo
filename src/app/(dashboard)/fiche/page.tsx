@@ -4,6 +4,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import CardLoad from "@/components/Card/CardLoad";
 import Pagination from "@/components/pagination/Pagination";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"; // Utilisez `next/navigation` pour la nouvelle API de navigation
 import { useEffect, useState } from "react";
 
 import Image from "next/image";
@@ -14,12 +15,15 @@ const Fiches = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const fetchFiches = async (search = "", page = 1) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/fiches?search=${search}&page=${page}`
+        `http://127.0.0.1:8000/api/fiches?search=${encodeURIComponent(
+          search
+        )}&page=${page}&sort=-created_at`
       );
       const data = await response.json();
       setFiches(data);
@@ -32,11 +36,14 @@ const Fiches = () => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+    const value = e.target.value;
+    console.log("Search term:", value);
+    setSearchTerm(value);
   };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+    console.log("Search term on submit:", searchTerm);
     setCurrentPage(1);
     fetchFiches(searchTerm, 1);
   };
@@ -49,6 +56,10 @@ const Fiches = () => {
   useEffect(() => {
     fetchFiches();
   }, []);
+
+  const handleFicheClick = (fiche) => {
+    router.push(`/formulaire?ficheId=${fiche.id}`);
+  };
 
   return (
     <div>
@@ -89,7 +100,11 @@ const Fiches = () => {
           [1, 2, 3, 4, 5, 6].map((item) => <CardLoad key={item} />)
         ) : fiches.length > 0 ? (
           fiches.map((fiche) => (
-            <div key={fiche.id} className="p-4 border rounded-md">
+            <div
+              key={fiche.id}
+              className="p-4 border rounded-md cursor-pointer"
+              onClick={() => handleFicheClick(fiche)}
+            >
               <h2 className="font-bold">Client: {fiche.ClientNom}</h2>
               <p>Intervenant: {fiche.NomIntervenant}</p>
               <p>Date: {fiche.Date}</p>

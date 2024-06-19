@@ -1,44 +1,20 @@
 "use client";
-import Image from "next/image";
-import { useRef, useState } from "react";
+
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { useReactToPrint } from "react-to-print";
 
-const Widget = () => {
-  const [formData, setFormData] = useState({
-    ClientNom: "",
-    Date: "",
-    ClientSite: "",
-    ClientBureau: "",
-    TypeIntervention: "",
-    TypeMateriel: "",
-    AutreMateriel: "",
-    Modele: "",
-    NumeroSerie: "",
-    OS: "",
-    Processeur: "",
-    CapaciteRAM: "",
-    TailleDisqueDur: "",
-    NomMachine: "",
-    PanneDeclaree: "",
-    ConstatTechnicien: "",
-    ProblemeResolu: false,
-    DeplacerDiagnostic: false,
-    NecessiteCommandePieces: false,
-    NonReparable: false,
-    Autres: "",
-    Comm: "",
-    NomIntervenant: "",
-    SignatureIntervenant: "",
-    NomUtilisateur: "",
-    SignatureUtilisateur: "",
-    ObservationsIntervenant: "",
-    ObservationsUtilisateur: "",
-    CommentairesUtilisateur: "",
-  });
+const Formulaire = () => {
+  const [ficheData, setFicheData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const ficheId = searchParams.get("ficheId");
 
   const sigCanvasIntervenant = useRef(null);
   const sigCanvasUtilisateur = useRef(null);
+
+  const [formData, setFormData] = useState({});
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -50,57 +26,6 @@ const Widget = () => {
     }
   };
 
-  const clearSignature = (canvas) => {
-    canvas.current.clear();
-  };
-
-  const formRef = useRef<HTMLDivElement>();
-  const handlePrint = useReactToPrint({
-    content: () => formRef.current,
-  });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Form submitted");
-
-    // Convert signatures to base64
-    const SignatureIntervenant = sigCanvasIntervenant.current
-      .getTrimmedCanvas()
-      .toDataURL("image/png");
-    const SignatureUtilisateur = sigCanvasUtilisateur.current
-      .getTrimmedCanvas()
-      .toDataURL("image/png");
-
-    const dataToSend = {
-      ...formData,
-      SignatureIntervenant,
-      SignatureUtilisateur,
-    };
-
-    console.log("Data to send:", dataToSend);
-
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/fiche", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const result = await response.json();
-      console.log("Success:", result);
-      // Handle success (e.g., show a success message)
-    } catch (error) {
-      console.error("Error:", error);
-      // Handle error (e.g., show an error message)
-    }
-  };
   const handleTypeInterventionChange = (e) => {
     const { value } = e.target;
     setFormData((prevFormData) => ({
@@ -108,32 +33,96 @@ const Widget = () => {
       TypeIntervention: value,
     }));
   };
+
+  const formRef = useRef<HTMLDivElement>();
+  const handlePrint = useReactToPrint({
+    content: () => formRef.current,
+  });
+
+  const loadImageFromBase64 = (base64) => {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = (error) => reject(error);
+      image.src = base64;
+    });
+  };
+  useEffect(() => {
+    if (ficheData) {
+      // Charger la signature de l'intervenant
+      if (ficheData.SignatureIntervenant) {
+        loadImageFromBase64(ficheData.SignatureIntervenant).then((image) => {
+          const canvas = sigCanvasIntervenant.current.getCanvas();
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        });
+      }
+
+      // Charger la signature de l'utilisateur
+      if (ficheData.SignatureUtilisateur) {
+        loadImageFromBase64(ficheData.SignatureUtilisateur).then((image) => {
+          const canvas = sigCanvasUtilisateur.current.getCanvas();
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        });
+      }
+    }
+  }, [ficheData]);
+
+  useEffect(() => {
+    if (ficheId) {
+      const fetchFicheData = async () => {
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:8000/api/fiches/${ficheId}`
+          );
+          if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des données");
+          }
+          const data = await response.json();
+          setFicheData(data);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des données de la fiche :",
+            error
+          );
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchFicheData();
+    }
+  }, [ficheId]);
+
+  if (loading) {
+    return <div>Chargement...</div>;
+  }
+
+  if (!ficheData) {
+    return <div>Aucune fiche trouvée.</div>;
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-4 bg-white dark:bg-zinc-800 text-blue dark:text-white border border-zinc-300 dark:border-zinc-700">
       <div ref={formRef} className="a4">
         <div className="flex items-center mb-4">
-          <Image
-            width={989}
-            height={113}
+          <img
             src="/tete.svg"
-            alt="Logo"
-            className="w-auto h-auto"
-            priority
+            alt="Description de l'image"
+            style={{ width: "100%", height: "auto" }} // Vous pouvez ajuster les styles selon vos besoins
           />
         </div>
         <div className="bg-green-700 text-white text-center py-2 mb-4">
           <h2 className="font-bold">FICHE D'INTERVENTION TECHNIQUE</h2>
         </div>
-        <form
-          className="grid grid-cols-2 gap-1 mt-0 mb-2"
-          onSubmit={handleSubmit}
-        >
+        <form className="grid grid-cols-2 gap-1 mt-0 mb-2">
           <div>
             <label className="block text-gray-700 font-bold">Client:</label>
             <input
               type="text"
               name="ClientNom"
-              value={formData.ClientNom}
+              value={ficheData?.ClientNom}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -143,7 +132,7 @@ const Widget = () => {
             <input
               type="date"
               name="Date"
-              value={formData.Date}
+              value={ficheData?.Date}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -153,7 +142,7 @@ const Widget = () => {
             <input
               type="text"
               name="ClientSite"
-              value={formData.ClientSite}
+              value={ficheData?.ClientSite}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -163,7 +152,7 @@ const Widget = () => {
             <input
               type="text"
               name="ClientBureau"
-              value={formData.ClientBureau}
+              value={ficheData?.ClientBureau}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -176,7 +165,7 @@ const Widget = () => {
               type="checkbox"
               name="TypeIntervention"
               value="Maintenance préventive"
-              checked={formData.TypeIntervention === "Maintenance préventive"}
+              checked={ficheData?.TypeIntervention === "Maintenance préventive"}
               onChange={handleTypeInterventionChange}
             />{" "}
             Maintenance préventive
@@ -186,7 +175,9 @@ const Widget = () => {
               type="checkbox"
               name="TypeIntervention"
               value="Intervention sur demande"
-              checked={formData.TypeIntervention === "Intervention sur demande"}
+              checked={
+                ficheData?.TypeIntervention === "Intervention sur demande"
+              }
               onChange={handleTypeInterventionChange}
               className="ml-4"
             />{" "}
@@ -203,7 +194,7 @@ const Widget = () => {
             </label>
             <select
               name="TypeMateriel"
-              value={formData.TypeMateriel}
+              value={ficheData?.TypeMateriel}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             >
@@ -223,7 +214,7 @@ const Widget = () => {
             <input
               type="text"
               name="AutreMateriel"
-              value={formData.AutreMateriel}
+              value={ficheData?.AutreMateriel}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -233,7 +224,7 @@ const Widget = () => {
             <input
               type="text"
               name="Modele"
-              value={formData.Modele}
+              value={ficheData?.Modele}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -243,7 +234,7 @@ const Widget = () => {
             <input
               type="text"
               name="NumeroSerie"
-              value={formData.NumeroSerie}
+              value={ficheData?.NumeroSerie}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -253,7 +244,7 @@ const Widget = () => {
             <input
               type="text"
               name="OS"
-              value={formData.OS}
+              value={ficheData?.OS}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -263,7 +254,7 @@ const Widget = () => {
             <input
               type="text"
               name="Processeur"
-              value={formData.Processeur}
+              value={ficheData?.Processeur}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -275,7 +266,7 @@ const Widget = () => {
             <input
               type="text"
               name="CapaciteRAM"
-              value={formData.CapaciteRAM}
+              value={ficheData?.CapaciteRAM}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -287,7 +278,7 @@ const Widget = () => {
             <input
               type="text"
               name="TailleDisqueDur"
-              value={formData.TailleDisqueDur}
+              value={ficheData?.TailleDisqueDur}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -299,7 +290,7 @@ const Widget = () => {
             <input
               type="text"
               name="NomMachine"
-              value={formData.NomMachine}
+              value={ficheData?.NomMachine}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -315,7 +306,7 @@ const Widget = () => {
             </label>
             <textarea
               name="PanneDeclaree"
-              value={formData.PanneDeclaree}
+              value={ficheData?.PanneDeclaree}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -326,7 +317,7 @@ const Widget = () => {
             </label>
             <textarea
               name="ConstatTechnicien"
-              value={formData.ConstatTechnicien}
+              value={ficheData?.ConstatTechnicien}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -342,7 +333,7 @@ const Widget = () => {
             </label>
             <textarea
               name="TravauxEffectues"
-              value={formData.TravauxEffectues}
+              value={ficheData?.TravauxEffectues}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -360,7 +351,7 @@ const Widget = () => {
               <input
                 type="checkbox"
                 name="ProblemeResolu"
-                checked={formData.ProblemeResolu}
+                checked={ficheData?.ProblemeResolu}
                 onChange={handleChange}
               />{" "}
               Problème résolu
@@ -369,7 +360,7 @@ const Widget = () => {
               <input
                 type="checkbox"
                 name="DeplacerDiagnostic"
-                checked={formData.DeplacerDiagnostic}
+                checked={ficheData?.DeplacerDiagnostic}
                 onChange={handleChange}
               />{" "}
               à déplacer
@@ -378,7 +369,7 @@ const Widget = () => {
               <input
                 type="checkbox"
                 name="NecessiteCommandePieces"
-                checked={formData.NecessiteCommandePieces}
+                checked={ficheData?.NecessiteCommandePieces}
                 onChange={handleChange}
               />{" "}
               Nécessite la commande de pièces
@@ -387,7 +378,7 @@ const Widget = () => {
               <input
                 type="checkbox"
                 name="NonReparable"
-                checked={formData.NonReparable}
+                checked={ficheData?.NonReparable}
                 onChange={handleChange}
               />{" "}
               non réparable
@@ -396,7 +387,7 @@ const Widget = () => {
               <input
                 type="text"
                 name="Autres"
-                value={formData.Autres}
+                value={ficheData?.Autres}
                 onChange={handleChange}
                 placeholder="Autres"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -412,7 +403,7 @@ const Widget = () => {
             <input
               type="checkbox"
               name="Insatisfait"
-              checked={formData.Insatisfait}
+              checked={ficheData?.Insatisfait}
               onChange={handleChange}
             />{" "}
             Insatisfait
@@ -421,7 +412,7 @@ const Widget = () => {
             <input
               type="checkbox"
               name="Satisfait"
-              checked={formData.Satisfait}
+              checked={ficheData?.Satisfait}
               onChange={handleChange}
             />{" "}
             Satisfait
@@ -431,7 +422,7 @@ const Widget = () => {
           <div>
             <textarea
               name="Comm"
-              value={formData.Comm}
+              value={ficheData?.Comm}
               onChange={handleChange}
               placeholder="Commentaires de l'utilisateur"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -446,7 +437,7 @@ const Widget = () => {
             <input
               type="text"
               name="NomIntervenant"
-              value={formData.NomIntervenant}
+              value={ficheData?.NomIntervenant}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -458,7 +449,7 @@ const Widget = () => {
             <input
               type="text"
               name="NomUtilisateur"
-              value={formData.NomUtilisateur}
+              value={ficheData?.NomUtilisateur}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -467,11 +458,7 @@ const Widget = () => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="pt-2 flex justify-center">
-              <button
-                type="button"
-                onClick={() => clearSignature(sigCanvasIntervenant)}
-                className="block text-gray-700 font-bold"
-              >
+              <button type="button" className="block text-gray-700 font-bold">
                 Signature de l'intervenant:
               </button>
             </div>
@@ -479,20 +466,24 @@ const Widget = () => {
               penColor="blue"
               canvasProps={{
                 height: 200,
-                weight: 500,
                 className:
                   "sigCanvas w-full bg-gray-100 border border-gray-300 rounded-md",
               }}
-              ref={(ref) => (sigCanvasIntervenant.current = ref)}
+              ref={(ref) => {
+                if (ref && ficheData?.SignatureIntervenant) {
+                  const canvas = ref.getCanvas();
+                  const ctx = canvas.getContext("2d");
+                  const image = new Image();
+                  image.onload = () =>
+                    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                  image.src = ficheData?.SignatureIntervenant;
+                }
+              }}
             />
           </div>
           <div>
             <div className="pt-2 flex justify-center">
-              <button
-                type="button"
-                onClick={() => clearSignature(sigCanvasUtilisateur)}
-                className="block text-gray-700 font-bold"
-              >
+              <button type="button" className="block text-gray-700 font-bold">
                 Signature de l’utilisateur:
               </button>
             </div>
@@ -500,22 +491,27 @@ const Widget = () => {
               penColor="blue"
               canvasProps={{
                 height: 200,
-                weight: 500,
                 className:
                   "sigCanvas w-full bg-gray-100 border border-gray-300 rounded-md",
               }}
-              ref={(ref) => (sigCanvasUtilisateur.current = ref)}
+              ref={(ref) => {
+                if (ref && ficheData?.SignatureUtilisateur) {
+                  const canvas = ref.getCanvas();
+                  const ctx = canvas.getContext("2d");
+                  const image = new Image();
+                  image.onload = () =>
+                    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                  image.src = ficheData?.SignatureUtilisateur;
+                }
+              }}
             />
           </div>
         </div>
         <div>
-          <Image
-            width={989}
-            height={113}
+          <img
             src="/pied.svg"
-            alt="Logo"
-            className="ml-5 w-auto h-auto"
-            priority
+            alt="Description de l'image"
+            style={{ width: "100%", height: "auto" }} // Vous pouvez ajuster les styles selon vos besoins
           />
         </div>
       </div>
@@ -525,15 +521,8 @@ const Widget = () => {
       >
         Print
       </button>
-      <button
-        type="submit"
-        onClick={handleSubmit}
-        className="bg-green-500 text-white py-2 px-4 rounded-md mt-4"
-      >
-        Submit
-      </button>
     </div>
   );
 };
 
-export default Widget;
+export default Formulaire;

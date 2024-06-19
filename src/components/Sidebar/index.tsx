@@ -146,14 +146,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               <li>
                 <Link
-                  href="/generate-pip"
+                  href="/fiche"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes("generate-pip") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <File className="h-5 w-5" />
-                  Rapports
+                  Fiches
                 </Link>
               </li>
             </ul>

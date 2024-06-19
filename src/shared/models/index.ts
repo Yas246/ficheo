@@ -1,124 +1,146 @@
 interface IUser {
-    id: number;
-    firstname: string;
-    lastname: string;
-    fullname: string;
-    email: string;
+  id: number;
+  firstname: string;
+  lastname: string;
+  fullname: string;
+  email: string;
 }
 
 interface IStats {
-    accepted: number,
-    canceled: number,
-    finished: number,
-    pending: number
+  accepted: number;
+  canceled: number;
+  finished: number;
+  pending: number;
 }
 
 interface IProject {
-    id?: number | string
-    title?: string;
-    overview?: string;
-    context?: string;
-    justification?: string;
-    description?: string;
-    global_objective?: string;
+  id?: number | string;
+  title?: string;
+  overview?: string;
+  context?: string;
+  justification?: string;
+  description?: string;
+  global_objective?: string;
 
-    objectives?: string[];
+  objectives?: string[];
 
-    duration?: number;
-    budget?: string;
-    budget_currency?: string;
+  duration?: number;
+  budget?: string;
+  budget_currency?: string;
 
-    logical_context?: {
-        impact?: string;
-        intermediate_outcomes?: LogicalContextIntermediateOutcome[];
-    };
+  logical_context?: {
+    impact?: string;
+    intermediate_outcomes?: LogicalContextIntermediateOutcome[];
+  };
 
-    intervention_strategies?: string[];
+  intervention_strategies?: string[];
 
-    partners?: Partner[];
+  partners?: Partner[];
 
-    quality_monitoring?: string[];
+  quality_monitoring?: string[];
 
-    performance_matrix?: PerformanceMatrixItem[];
+  performance_matrix?: PerformanceMatrixItem[];
 
-    budget_plan?: BudgetPlanItem[];
+  budget_plan?: BudgetPlanItem[];
 
-    calendar?: CalendarItem[];
+  calendar?: CalendarItem[];
 
-    created_at?: string;
+  created_at?: string;
 
-    [key: string]: any
+  [key: string]: any;
 }
 
 interface LogicalContextIntermediateOutcome {
-    title?: string;
-    immediate_outcomes?: LogicalContextImmediateOutcome[];
+  title?: string;
+  immediate_outcomes?: LogicalContextImmediateOutcome[];
 }
 
 interface LogicalContextImmediateOutcome {
-    title?: string;
-    activities?: LogicalContextActivity[];
+  title?: string;
+  activities?: LogicalContextActivity[];
 }
 
 interface LogicalContextActivity {
-    title?: string;
-    effect?: string;
+  title?: string;
+  effect?: string;
 }
 
 interface Partner {
-    managment_levels?: PartnerManagementLevel[];
+  managment_levels?: PartnerManagementLevel[];
 }
 
 interface PartnerManagementLevel {
-    title?: string;
-    level?: string;
-    stakeholders?: PartnerStakeholder[];
+  title?: string;
+  level?: string;
+  stakeholders?: PartnerStakeholder[];
 }
 
 interface PartnerStakeholder {
-    name?: string[];
-    abilities?: string[];
+  name?: string[];
+  abilities?: string[];
 }
 
 interface PerformanceMatrixItem {
-    outcome?: string,
-    indicateur?: {
-        title?: string;
-        props?: {
-            baseline?: string[];
-            data_souces?: string[];
-            target?: string;
-            managers?: string[];
-            collect_tools?: string[];
-            frequency?: string[];
-        }
-    }[],
+  outcome?: string;
+  indicateur?: {
+    title?: string;
+    props?: {
+      baseline?: string[];
+      data_souces?: string[];
+      target?: string;
+      managers?: string[];
+      collect_tools?: string[];
+      frequency?: string[];
+    };
+  }[];
 }
 
 interface BudgetPlanItem {
-    section?: string;
-    activities?: BudgetPlanActivity[];
+  section?: string;
+  activities?: BudgetPlanActivity[];
 }
 
 interface BudgetPlanActivity {
-    title?: string;
-    budget?: number;
+  title?: string;
+  budget?: number;
 }
 
 interface CalendarItem {
-    outcome?: string;
-    activities?: CalendarActivity[];
+  outcome?: string;
+  activities?: CalendarActivity[];
 }
 
 interface CalendarActivity {
-    title?: string;
-    period?: {
-        start_date?: string;
-        end_date?: string;
-    }[]
+  title?: string;
+  period?: {
+    start_date?: string;
+    end_date?: string;
+  }[];
 }
 
+interface IFiche extends IProject {
+  id?: number | string;
+  ClientNom?: string;
+  TypeIntervention?: string; // Assurez-vous d'utiliser le type correct selon votre backend
+  NomIntervenant?: string;
+}
 
-interface IProjectPlan extends IProject { }
+interface IProjectPlan extends IProject {}
 
-export type { IUser, IProject, IProjectPlan, IStats,LogicalContextIntermediateOutcome, LogicalContextImmediateOutcome, LogicalContextActivity, Partner, PartnerManagementLevel, PartnerStakeholder, PerformanceMatrixItem, BudgetPlanItem, CalendarItem, CalendarActivity }
+export type {
+  IUser,
+  IProject,
+  IProjectPlan,
+  IStats,
+  LogicalContextIntermediateOutcome,
+  LogicalContextImmediateOutcome,
+  LogicalContextActivity,
+  Partner,
+  PartnerManagementLevel,
+  PartnerStakeholder,
+  PerformanceMatrixItem,
+  BudgetPlanItem,
+  CalendarItem,
+  CalendarActivity,
+  IFiche,
+};

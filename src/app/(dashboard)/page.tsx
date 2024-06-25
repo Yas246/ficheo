@@ -4,7 +4,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import CardDataStats from "@/components/Card/CardDataStats";
 import statApi from "@/services/stat.service";
 import { IStats } from "@/shared/models";
-import { LucideFile, LucideFileArchive } from "lucide-react";
+import { LucideFile } from "lucide-react";
 import React from "react";
 
 export default function Dashboard() {
@@ -45,65 +45,34 @@ export default function Dashboard() {
     <>
       <Breadcrumb pageName="Dashboard" />
       <div className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
           <CardDataStats
-            title="Missions acceptées"
+            title="Mission(s) acceptée(s)"
             total={projectStats.accepted}
             loading={loading}
           >
             <LucideFile className="fill-primary" />
           </CardDataStats>
           <CardDataStats
-            title="Missions terminées"
+            title="Mission(s) terminée(s)"
             total={projectStats.finished}
             loading={loading}
           >
             <LucideFile className="fill-primary" />
           </CardDataStats>
           <CardDataStats
-            title="Missions annulées"
+            title="Mission(s) annulée(s)"
             total={projectStats.canceled}
             loading={loading}
           >
             <LucideFile className="fill-primary" />
           </CardDataStats>
           <CardDataStats
-            title="Missions en cours"
+            title="Mission(s) en cour(s)"
             total={projectStats.pending}
             loading={loading}
           >
             <LucideFile className="fill-primary" />
-          </CardDataStats>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-          <CardDataStats
-            title="PiPs acceptés"
-            total={projectPlanStats.accepted}
-            loading={loading}
-          >
-            <LucideFileArchive className="fill-primary" />
-          </CardDataStats>
-          <CardDataStats
-            title="PiPs terminés"
-            total={projectPlanStats.finished}
-            loading={loading}
-          >
-            <LucideFileArchive className="fill-primary" />
-          </CardDataStats>
-          <CardDataStats
-            title="PiPs annulés"
-            total={projectPlanStats.canceled}
-            loading={loading}
-          >
-            <LucideFileArchive className="fill-primary" />
-          </CardDataStats>
-          <CardDataStats
-            title="PiPs en cours"
-            total={projectPlanStats.pending}
-            loading={loading}
-          >
-            <LucideFileArchive className="fill-primary" />
           </CardDataStats>
         </div>
       </div>

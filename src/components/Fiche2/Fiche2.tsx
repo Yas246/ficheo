@@ -171,7 +171,7 @@ const Widget = () => {
         </form>
         <div className="mt-2 mb-2">
           <span className="font-bold">Type d'intervention :</span>
-          <label>
+          <label className="ml-4">
             <input
               type="checkbox"
               name="TypeIntervention"

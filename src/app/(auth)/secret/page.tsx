@@ -4,24 +4,16 @@ import InputPassword from "@/components/Form/InputPassword";
 import InputText from "@/components/Form/InputText";
 import { Button } from "@/components/ui/button";
 import authApi from "@/services/auth.service";
-import useCookie from "@/shared/helpers/useCookie";
 import useToast from "@/shared/helpers/useToast";
-import { authUserSelector } from "@/stores/useUserStore";
 import { useFormik } from "formik";
 import { useRouter } from "next-nprogress-bar";
-import Link from "next/link";
-import React from "react";
-import { useSetRecoilState } from "recoil";
+import React, { useState } from "react";
 import * as Yup from "yup";
 
 const SignUp: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
 
   const { toastSuccess } = useToast();
-
-  const setAuthUser = useSetRecoilState(authUserSelector);
-
-  const { setCookie } = useCookie();
 
   const router = useRouter();
 
@@ -54,30 +46,55 @@ const SignUp: React.FC = () => {
         .signUp(values)
         .then((response: any) => {
           toastSuccess(response.message);
-
-          authApi()
-            .signIn({ email: values.email, password: values.password })
-            .then((response: any) => {
-              toastSuccess(response.message);
-
-              setCookie("auth_token", response.data.token);
-
-              setAuthUser(response.data.user);
-
-              router.push("/");
-            });
+          // Vous pouvez ajouter ici des actions supplémentaires si nécessaire
         })
-        .finally(() => setLoading(false));
+        .catch((error) => {
+          // Handle error appropriately, e.g., show an error message
+        })
+        .finally(() => setLoading(false)); // Ensure loading is set to false regardless of outcome
     },
   });
+
+  const [formData, setFormData] = useState({
+    Role: "",
+  });
+  const handleRoleChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      Role: value,
+    }));
+  };
 
   return (
     <div className="w-full flex flex-col">
       <h2 className="mb-9 text-2xl text-center font-bold text-green-700 dark:text-white sm:text-title-xl2">
-        Inscrivez-vous sur FicheInfo
+        Créer un compte
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <span className="font-bold">Type de compte :</span>
+        <label className="ml-5">
+          <input
+            type="checkbox"
+            name="Role"
+            value="administrateur"
+            checked={formData.Role === "administrateur"}
+            onChange={handleRoleChange}
+          />{" "}
+          Administrateur
+        </label>
+        <label className="ml-4">
+          <input
+            type="checkbox"
+            name="Role"
+            value="technicien"
+            checked={formData.Role === "technicien"}
+            onChange={handleRoleChange}
+            className="ml-4"
+          />{" "}
+          Technicien
+        </label>
         <InputText
           name="firstname"
           label="Prénom"
@@ -136,15 +153,6 @@ const SignUp: React.FC = () => {
         >
           Créer un compte
         </Button>
-
-        <div className="text-center">
-          <p>
-            Vous avez deja un compte ?{" "}
-            <Link href="/sign-in" className="text-primary">
-              Se connecter
-            </Link>
-          </p>
-        </div>
       </form>
     </div>
   );

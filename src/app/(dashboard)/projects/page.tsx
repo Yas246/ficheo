@@ -15,7 +15,7 @@ import {
 import projectApi from "@/services/project.service";
 import { IProject } from "@/shared/models";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { Ellipsis, EyeIcon, Loader2, LucideArrowUpCircle } from "lucide-react";
+import { CircleX, Ellipsis, EyeIcon, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -60,8 +60,8 @@ export default function Project() {
             className="outline-0 w-full flex justify-start"
           >
             <div className="flex items-center space-x-2 cursor-pointer">
-              <LucideArrowUpCircle className="text-yellow-500" size={18} />
-              <span>Actualiser</span>
+              <CircleX className="text-red" size={18} />
+              <span>Clôturer</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

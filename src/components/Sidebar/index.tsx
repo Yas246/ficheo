@@ -3,8 +3,10 @@
 import {
   ArrowLeftCircle,
   CalendarFold,
+  ClipboardPlus,
   File,
   LayoutDashboard,
+  SquareUser,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -154,6 +156,32 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <File className="h-5 w-5" />
                   Fiches
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/rapport"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes("generate-pip") &&
+                    "bg-graydark dark:bg-meta-4"
+                  }`}
+                >
+                  <ClipboardPlus className="h-5 w-5" />
+                  Rapports
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/sign-up"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes("generate-pip") &&
+                    "bg-graydark dark:bg-meta-4"
+                  }`}
+                >
+                  <SquareUser className="h-5 w-5" />
+                  Créer compte
                 </Link>
               </li>
             </ul>

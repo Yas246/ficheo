@@ -8,7 +8,6 @@ import useCookie from "@/shared/helpers/useCookie";
 import useToast from "@/shared/helpers/useToast";
 import { authUserSelector } from "@/stores/useUserStore";
 import { useFormik } from "formik";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useSetRecoilState } from "recoil";
@@ -89,15 +88,6 @@ const SignIn: React.FC = () => {
         >
           Se connecter
         </Button>
-
-        <div className="text-center">
-          <p>
-            Pas encore de compte ?{" "}
-            <Link href="/sign-up" className="text-primary">
-              Creer un compte
-            </Link>
-          </p>
-        </div>
       </form>
     </div>
   );
